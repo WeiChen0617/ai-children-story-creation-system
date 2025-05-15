@@ -1,0 +1,7 @@
+# 推荐Python版本
+# python>=3.8
+
+# 项目依赖
+streamlit
+openai
+textstat
