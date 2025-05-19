@@ -9,18 +9,14 @@ from src.readability import ReadabilityAnalyzer
 from src.feedback import FeedbackCollector
 import uuid
 
-# 必须是第一个 Streamlit 命令
 st.set_page_config(page_title="AI儿童故事创作系统", layout="wide")
 
-# 先初始化 lang
 if 'lang' not in st.session_state:
     st.session_state['lang'] = 'en'
 
-# 定义中英文文本字典
 def T(zh, en):
     return zh if st.session_state['lang']=='zh' else en
 
-# 顶部一行：左标题，右语言切换
 title_col, lang_col = st.columns([8, 1])
 with title_col:
     st.markdown(
@@ -30,7 +26,7 @@ with title_col:
 with lang_col:
     lang_map = {"中文 🇨🇳": "zh", "English 🇬🇧": "en"}
     lang_display = st.selectbox(
-        "",  # 不显示label
+        "", 
         options=list(lang_map.keys()),
         index=1 if st.session_state.get('lang', 'en') == 'en' else 0
     )
@@ -84,7 +80,6 @@ with col2:
             story = generator.generate_story(prompt)
         st.session_state["story"] = story
         story_generated = True
-    # 展示故事
     if "story" in st.session_state and st.session_state["story"]:
         st.markdown(f"<h3 style='font-size:1.15em;margin-bottom:0.5em;'>{T('AI生成的故事','AI Generated Story')}</h3>", unsafe_allow_html=True)
         indent_style = "text-indent:2em;" if st.session_state['lang'] == 'zh' else "text-indent:0;"

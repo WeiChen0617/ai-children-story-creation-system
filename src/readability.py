@@ -30,7 +30,6 @@ class ReadabilityAnalyzer:
         avg_syllables_per_word = textstat.avg_syllables_per_word(text)
         word_count = textstat.lexicon_count(text, removepunct=True)
         sentence_count = textstat.sentence_count(text)
-        # 推荐年龄段（FRE分数与年龄段的简单映射）
         if fre >= 90:
             age_range = "5-6"
         elif fre >= 80:

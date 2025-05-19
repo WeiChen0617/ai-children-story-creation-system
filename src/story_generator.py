@@ -11,9 +11,13 @@ AI增强儿童故事创作系统 - 故事生成模块
 """
 
 import os
-from typing import Optional
+# Streamlit Cloud secrets 兼容
+try:
+    import streamlit as st
+    secrets = st.secrets
+except ImportError:
+    secrets = {}
 
-# 可扩展：如需集成Claude、Gemini等模型，可在此处引入相关SDK
 import openai
 
 class StoryGenerator:
@@ -24,10 +28,11 @@ class StoryGenerator:
     def __init__(self, model: str = "openai", openai_model: str = "gpt-3.5-turbo"):
         self.model = model
         self.openai_model = openai_model
+        # 优先用secrets，其次用环境变量
         self.api_keys = {
-            "openai": os.getenv("OPENAI_API_KEY"),
-            "claude": os.getenv("CLAUDE_API_KEY"),
-            "gemini": os.getenv("GEMINI_API_KEY"),
+            "openai": secrets.get("OPENAI_API_KEY", os.getenv("OPENAI_API_KEY")),
+            "claude": secrets.get("CLAUDE_API_KEY", os.getenv("CLAUDE_API_KEY")),
+            "gemini": secrets.get("GEMINI_API_KEY", os.getenv("GEMINI_API_KEY")),
         }
         # 初始化各模型API
         if self.model == "openai":
