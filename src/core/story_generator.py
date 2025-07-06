@@ -11,14 +11,8 @@ AI增强儿童故事创作系统 - 故事生成模块
 """
 
 import os
-# Streamlit Cloud secrets 兼容
-try:
-    import streamlit as st
-    secrets = st.secrets
-except ImportError:
-    secrets = {}
-
 import openai
+from ..config import OPENAI_API_KEY  # CLAUDE_API_KEY, GEMINI_API_KEY
 
 class StoryGenerator:
     """
@@ -28,11 +22,11 @@ class StoryGenerator:
     def __init__(self, model: str = "openai", openai_model: str = "gpt-3.5-turbo"):
         self.model = model
         self.openai_model = openai_model
-        # 优先用secrets，其次用环境变量
+        # 使用从config导入的API密钥
         self.api_keys = {
-            "openai": secrets.get("OPENAI_API_KEY", os.getenv("OPENAI_API_KEY")),
-            "claude": secrets.get("CLAUDE_API_KEY", os.getenv("CLAUDE_API_KEY")),
-            "gemini": secrets.get("GEMINI_API_KEY", os.getenv("GEMINI_API_KEY")),
+            "openai": OPENAI_API_KEY,
+            # "claude": CLAUDE_API_KEY,
+            # "gemini": GEMINI_API_KEY,
         }
         # 初始化各模型API
         if self.model == "openai":
@@ -60,12 +54,12 @@ class StoryGenerator:
             except Exception as e:
                 print(f"[错误] OpenAI故事生成失败: {e}")
                 return "[生成失败，请检查OpenAI API Key和网络设置]"
-        elif self.model == "claude":
-            # TODO: 集成Claude API调用
-            return "[Claude模型暂未集成]"
-        elif self.model == "gemini":
-            # TODO: 集成Gemini API调用
-            return "[Gemini模型暂未集成]"
+        # elif self.model == "claude":
+        #     # TODO: 集成Claude API调用
+        #     return "[Claude模型暂未集成]"
+        # elif self.model == "gemini":
+        #     # TODO: 集成Gemini API调用
+        #     return "[Gemini模型暂未集成]"
         else:
             return "[不支持的模型类型]"
 
@@ -73,4 +67,4 @@ class StoryGenerator:
 if __name__ == "__main__":
     generator = StoryGenerator(model="openai", openai_model="gpt-3.5-turbo")
     sample_prompt = "请为6岁的儿童写一个关于\"勇敢\"的原创故事，主角是一只小兔子，语言简洁，积极正面，字数不超过300词。"
-    print("生成故事示例：\n", generator.generate_story(sample_prompt)) 
+    print("生成故事示例：\n", generator.generate_story(sample_prompt))
